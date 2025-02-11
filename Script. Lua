@@ -1,0 +1,49 @@
+-- Auto Bounty Script
+
+-- Configuration
+local bountyTarget = "Target Bounty Name" -- Replace with the target bounty name
+local bountyRange = 100 -- Range to check for bounty
+local collectInterval = 5 -- Interval to collect bounty (in seconds)
+
+-- Variables
+local bountyCollected = false
+
+-- Function to check for bounty
+local function checkBounty()
+    -- Get player's position
+    local playerPos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    
+    -- Check if bounty is within range
+    if (playerPos - Vector3.new(bountyTarget.Position.X, bountyTarget.Position.Y, bountyTarget.Position.Z)).Magnitude <= bountyRange then
+        -- Bounty is within range, collect it
+        collectBounty()
+    end
+end
+
+-- Function to collect bounty
+local function collectBounty()
+    -- Get bounty's position
+    local bountyPos = bountyTarget.Position
+    
+    -- Move to bounty's position
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(bountyPos)
+    
+    -- Collect bounty
+    game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    wait(1)
+    game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
+    wait(1)
+    game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
+    
+    -- Set bountyCollected to true
+    bountyCollected = true
+end
+
+-- Main loop
+while true do
+    -- Check for bounty every second
+    checkBounty()
+    
+    -- Wait for collectInterval seconds
+    wait(collectInterval)
+end
